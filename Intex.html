@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PC INSIDE — Explore Your PC</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --bg:#080a10;
+  --panel:#111722;
+  --cyan:#00e5ff;
+  --purple:#9d5cff;
+  --text:#f4f7ff;
+  --muted:#8b96a9;
+}
+
+*{box-sizing:border-box}
+
+body{
+ margin:0;
+ background:var(--bg);
+ color:var(--text);
+ font-family:Inter,Arial,sans-serif;
+ overflow-x:hidden;
+}
+
+body:before{
+ content:"";
+ position:fixed;
+ inset:0;
+ z-index:-1;
+ background:
+ radial-gradient(circle at 80% 20%,#17344b55,transparent 35%),
+ radial-gradient(circle at 10% 70%,#48215b44,transparent 35%);
+}
+
+nav{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ padding:22px 7%;
+ border-bottom:1px solid #ffffff15;
+}
+
+.logo{
+ font-family:Orbitron;
+ font-size:22px;
+ font-weight:900;
+ letter-spacing:3px;
+}
+
+.logo span{color:var(--cyan)}
+
+.nav-tag{
+ color:var(--muted);
+ font-size:11px;
+ letter-spacing:3px;
+}
+
+.hero{
+ max-width:1200px;
+ margin:auto;
+ padding:65px 6% 30px;
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ align-items:center;
+ gap:25px;
+}
+
+.eyebrow{
+ color:var(--cyan);
+ font-size:11px;
+ letter-spacing:4px;
+ font-weight:bold;
+}
+
+h1{
+ font-family:Orbitron;
+ font-size:clamp(38px,6vw,76px);
+ line-height:1.08;
+ margin:20px 0;
+}
+
+h1 span{
+ color:transparent;
+ -webkit-text-stroke:1px var(--cyan);
+}
+
+.hero p{
+ color:var(--muted);
+ line-height:1.8;
+ max-width:450px;
+}
+
+.primary-btn{
+ display:inline-block;
+ margin-top:20px;
+ padding:15px 24px;
+ color:#001014;
+ background:var(--cyan);
+ border:0;
+ border-radius:5px;
+ font-weight:800;
+ cursor:pointer;
+ box-shadow:0 0 25px #00e5ff44;
+}
+
+.visual{
+ min-height:440px;
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ perspective:1100px;
+ overflow:hidden;
+ touch-action:pan-y;
+}
+
+.pc{
+ position:relative;
+ width:290px;
+ height:370px;
+ transform-style:preserve-3d;
+ transform:rotateY(-25deg) rotateX(5deg);
+ transition:transform .15s;
+ filter:drop-shadow(0 0 35px #00e5ff22);
+}
+
+.tower{
+ position:absolute;
+ inset:0;
+ background:linear-gradient(135deg,#273342,#0b101a);
+ border:2px solid #7b94a9;
+ border-radius:12px;
+ box-shadow:
+ inset 0 0 30px #00e5ff18,
+ 20px 25px 50px #000;
+ transform-style:preserve-3d;
+}
+
+.tower:before{
+ content:"";
+ position:absolute;
+ width:35px;
+ height:100%;
+ right:-37px;
+ top:10px;
+ background:linear-gradient(90deg,#172333,#080c13);
+ transform:rotateY(90deg);
+ transform-origin:left;
+ border:1px solid #52677d;
+}
+
+.tower:after{
+ content:"PC INSIDE";
+ position:absolute;
+ bottom:12px;
+ left:0;
+ width:100%;
+ text-align:center;
+ font-family:Orbitron;
+ font-size:10px;
+ letter-spacing:4px;
+ color:var(--cyan);
+ text-shadow:0 0 10px var(--cyan);
+}
+
+.glass{
+ position:absolute;
+ inset:12px;
+ border:1px solid #8aa8bd;
+ border-radius:5px;
+ background:linear-gradient(135deg,#0b1823cc,#111a25aa);
+ overflow:hidden;
+ box-shadow:inset 0 0 25px #00e5ff20;
+}
+
+.board{
+ position:absolute;
+ left:12px;
+ top:15px;
+ width:155px;
+ height:245px;
+ border:2px solid #547d76;
+ border-radius:5px;
+ background:
+ linear-gradient(90deg,transparent 48%,#00e5ff22 49%,transparent 50%),
+ linear-gradient(0deg,transparent 48%,#00e5ff22 49%,transparent 50%),
+ #172d2c;
+ background-size:24px 24px;
+ cursor:pointer;
+}
+
+.board:after{
+ content:"MOTHERBOARD";
+ position:absolute;
+ top:7px;
+ left:7px;
+ font-size:7px;
+ letter-spacing:2px;
+ color:#8effd9;
+}
+
+.cpu{
+ position:absolute;
+ width:55px;
+ height:55px;
+ top:65px;
+ left:47px;
+ border:5px solid #73849b;
+ border-radius:5px;
+ background:linear-gradient(135deg,#d6e0eb,#66758c);
+ box-shadow:0 0 20px #00e5ff77;
+ display:grid;
+ place-items:center;
+ font-size:11px;
+ font-weight:900;
+ color:#17202d;
+ cursor:pointer;
+}
+
+.ram{
+ position:absolute;
+ top:35px;
+ right:13px;
+ width:13px;
+ height:100px;
+ background:linear-gradient(90deg,#a5ffe7,#126c66);
+ border:2px solid #b4fff2;
+ box-shadow:0 0 12px #00ffc866;
+ cursor:pointer;
+}
+
+.ram.two{right:31px}
+
+.gpu{
+ position:absolute;
+ left:8px;
+ bottom:30px;
+ width:135px;
+ height:48px;
+ border:2px solid #a78aff;
+ border-radius:5px;
+ background:linear-gradient(90deg,#3d286c,#141a32);
+ box-shadow:0 0 20px #9d5cff66;
+ cursor:pointer;
+ display:grid;
+ place-items:center;
+ font-family:Orbitron;
+ font-size:10px;
+ color:#d5c3ff;
+}
+
+.fan{
+ position:absolute;
+ right:14px;
+ bottom:37px;
+ width:78px;
+ height:78px;
+ border-radius:50%;
+ border:4px solid #00dfff;
+ background:repeating-conic-gradient(#00bcd4 0deg 20deg,#122b43 20deg 45deg);
+ box-shadow:0 0 25px #00e5ff88;
+ cursor:pointer;
+ animation:spin 8s linear infinite;
+}
+
+.fan:after{
+ content:"";
+ position:absolute;
+ width:19px;
+ height:19px;
+ border-radius:50%;
+ background:#e1faff;
+ left:26px;
+ top:26px;
+}
+
+@keyframes spin{
+ to{transform:rotate(360deg)}
+}
+
+.power{
+ position:absolute;
+ right:15px;
+ top:18px;
+ width:85px;
+ height:42px;
+ border:1px solid #a78aff;
+ border-radius:4px;
+ background:#29203f;
+ color:#d8c4ff;
+ font-size:9px;
+ display:grid;
+ place-items:center;
+ cursor:pointer;
+}
+
+.ssd{
+ position:absolute;
+ bottom:12px;
+ left:20px;
+ width:75px;
+ height:27px;
+ border:1px solid #aebbc9;
+ background:linear-gradient(90deg,#6d7888,#273444);
+ color:white;
+ font-size:8px;
+ display:grid;
+ place-items:center;
+ cursor:pointer;
+}
+
+.led{
+ position:absolute;
+ right:12px;
+ top:12px;
+ width:7px;
+ height:7px;
+ border-radius:50%;
+ background:var(--cyan);
+ box-shadow:0 0 15px var(--cyan);
+}
+
+.controls{
+ display:flex;
+ gap:10px;
+ justify-content:center;
+ margin-top:-10px;
+}
+
+.control-btn{
+ padding:10px 17px;
+ background:#151f2d;
+ border:1px solid #34485e;
+ color:white;
+ border-radius:5px;
+ cursor:pointer;
+}
+
+.section{
+ max-width:1150px;
+ margin:70px auto;
+ padding:0 6%;
+}
+
+.section-title{
+ font-family:Orbitron;
+ font-size:clamp(22px,4vw,35px);
+}
+
+.section-desc{
+ color:var(--muted);
+ font-size:14px;
+ line-height:1.7;
+}
+
+.info-box{
+ background:linear-gradient(135deg,#111d2c,#141323);
+ border:1px solid #34465e;
+ border-radius:12px;
+ padding:25px;
+ margin-top:25px;
+ min-height:150px;
+ box-shadow:0 15px 40px #0005;
+}
+
+.info-box h3{
+ color:var(--cyan);
+ font-family:Orbitron;
+}
+
+.info-box p{
+ color:#c0c9d6;
+ line-height:1.8;
+}
+
+.grid{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:15px;
+ margin-top:25px;
+}
+
+.card{
+ background:linear-gradient(145deg,#141e2b,#0d111b);
+ border:1px solid #27394d;
+ border-radius:10px;
+ padding:22px;
+ cursor:pointer;
+ transition:.3s;
+}
+
+.card:hover{
+ transform:translateY(-6px);
+ border-color:var(--cyan);
+ box-shadow:0 10px 30px #00e5ff18;
+}
+
+.card-icon{
+ font-size:30px;
+ margin-bottom:15px;
+}
+
+.card h3{font-size:16px}
+
+.card p{
+ color:var(--muted);
+ font-size:12px;
+ line-height:1.6;
+}
+
+.quiz{
+ background:linear-gradient(135deg,#102534,#201631);
+ border:1px solid #496178;
+ padding:30px;
+ border-radius:12px;
+ margin-top:25px;
+}
+
+.quiz button{
+ display:block;
+ width:100%;
+ text-align:left;
+ padding:14px;
+ margin:10px 0;
+ border-radius:6px;
+ border:1px solid #526779;
+ color:white;
+ background:#111c29;
+ cursor:pointer;
+}
+
+.quiz button:hover{
+ border-color:var(--cyan);
+}
+
+#result{
+ color:var(--cyan);
+ font-weight:bold;
+}
+
+footer{
+ text-align:center;
+ border-top:1px solid #ffffff18;
+ padding:35px;
+ color:#69788b;
+ font-size:11px;
+ letter-spacing:2px;
+}
+
+@media(max-width:750px){
+ .hero{grid-template-columns:1fr;text-align:center}
+ .hero p{margin:auto}
+ .visual{min-height:400px}
+ .grid{grid-template-columns:repeat(2,1fr)}
+}
+
+@media(max-width:420px){
+ .grid{grid-template-columns:1fr}
+ .nav-tag{display:none}
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+ <div class="logo">PC <span>INSIDE</span></div>
+ <div class="nav-tag">INTERACTIVE COMPUTER LAB</div>
+</nav>
+
+<section class="hero">
+
+ <div>
+  <div class="eyebrow">01 / EXPLORE TECHNOLOGY</div>
+
+  <h1>INSIDE<br><span>THE PC</span></h1>
+
+  <p>
+   Компьютердің ішкі әлеміне саяхат жаса.
+   Бөлшектерді зертте, олардың қызметін үйрен
+   және өз біліміңді тексер.
+  </p>
+
+  <button class="primary-btn"
+   onclick="document.getElementById('explore').scrollIntoView({behavior:'smooth'})">
+   ЗЕРТТЕУДІ БАСТА →
+  </button>
+ </div>
+
+ <div>
+  <div class="visual" id="visual">
+   <div class="pc" id="pc">
+    <div class="tower">
+     <div class="glass">
+
+      <div class="board" onclick="show('board')"></div>
+
+      <div class="cpu" onclick="show('cpu')">CPU</div>
+
+      <div class="ram" onclick="show('ram')"></div>
+      <div class="ram two" onclick="show('ram')"></div>
+
+      <div class="gpu" onclick="show('gpu')">RTX / GPU</div>
+
+      <div class="fan" onclick="show('fan')"></div>
+
+      <div class="power" onclick="show('power')">POWER UNIT</div>
+
+      <div class="ssd" onclick="show('ssd')">SSD DRIVE</div>
+
+      <div class="led"></div>
+     </div>
+    </div>
+   </div>
+  </div>
+
+  <div class="controls">
+   <button class="control-btn" onclick="rotate(-35)">↶</button>
+   <button class="control-btn" onclick="rotate(35)">↷</button>
+   <button class="control-btn" onclick="reset()">RESET</button>
+  </div>
+ </div>
+
+</section>
+
+<section class="section" id="explore">
+
+ <div class="eyebrow">02 / COMPONENTS</div>
+ <h2 class="section-title">КОМПЬЮТЕРДІҢ ІШКІ ҚҰРЫЛЫСЫ</h2>
+
+ <p class="section-desc">
+  Жүйелік блоктың бөлшектерін таңда.
+  Әр компоненттің қызметімен таныс.
+ </p>
+
+ <div class="info-box" id="info">
+  <h3>WELCOME TO PC INSIDE</h3>
+  <p>Жүйелік блоктағы бөлшекті бас немесе төмендегі карталарды таңда.</p>
+ </div>
+
+ <div class="grid">
+
+  <div class="card" onclick="show('board')">
+   <div class="card-icon">🟩</div>
+   <h3>Аналық тақша</h3>
+   <p>Барлық негізгі компоненттерді байланыстырады.</p>
+  </div>
+
+  <div class="card" onclick="show('cpu')">
+   <div class="card-icon">⚙️</div>
+   <h3>Процессор</h3>
+   <p>Ақпаратты өңдейді және командаларды орындайды.</p>
+  </div>
+
+  <div class="card" onclick="show('ram')">
+   <div class="card-icon">💾</div>
+   <h3>RAM</h3>
+   <p>Жұмыс кезінде деректерді уақытша сақтайды.</p>
+  </div>
+
+  <div class="card" onclick="show('gpu')">
+   <div class="card-icon">🎮</div>
+   <h3>Видеокарта</h3>
+   <p>Графикалық ақпаратты өңдейді.</p>
+  </div>
+
+  <div class="card" onclick="show('fan')">
+   <div class="card-icon">🌀</div>
+   <h3>Желдеткіш</h3>
+   <p>Компьютер бөлшектерін салқындатады.</p>
+  </div>
+
+  <div class="card" onclick="show('power')">
+   <div class="card-icon">⚡</div>
+   <h3>Қуат көзі</h3>
+   <p>Компьютерді электр энергиясымен қамтамасыз етеді.</p>
+  </div>
+
+  <div class="card" onclick="show('ssd')">
+   <div class="card-icon">💿</div>
+   <h3>SSD / HDD</h3>
+   <p>Файлдар мен бағдарламаларды сақтайды.</p>
+  </div>
+
+ </div>
+
+</section>
+
+<section class="section">
+
+ <div class="eyebrow">03 / KNOWLEDGE TEST</div>
+ <h2 class="section-title">ӨЗ БІЛІМІҢДІ ТЕКСЕР</h2>
+
+ <div class="quiz">
+  <h3 id="question">Процессордың негізгі қызметі қандай?</h3>
+
+  <button onclick="answer(0)">Ақпаратты өңдеу</button>
+  <button onclick="answer(1)">Дыбыс шығару</button>
+  <button onclick="answer(2)">Компьютерді салқындату</button>
+
+  <p id="result"></p>
+  <button class="primary-btn" onclick="nextQuestion()">КЕЛЕСІ СҰРАҚ →</button>
+ </div>
+
+</section>
+
+<footer>
+ PC INSIDE © 2026 — EXPLORE THE WORLD OF TECHNOLOGY
+</footer>
+
+<script>
+const descriptions = {
+ board:["АНАЛЫҚ ТАҚША","Компьютердің барлық негізгі бөлшектері осы тақшаға қосылады. Ол олардың өзара байланысын қамтамасыз етеді."],
+ cpu:["ПРОЦЕССОР","Компьютердің негізгі есептеу құрылғысы. Командаларды орындайды және ақпаратты өңдейді."],
+ ram:["ЖЕДЕЛ ЖАД — RAM","Компьютер жұмыс істеп тұрған кезде қажетті деректерді уақытша сақтайды."],
+ gpu:["ВИДЕОКАРТА","Графикалық ақпаратты өңдеп, мониторға кескін шығаруға көмектеседі."],
+ fan:["ЖЕЛДЕТКІШ","Компьютердің ішіндегі температураны төмендетіп, бөлшектердің салқындауына көмектеседі."],
+ power:["ҚУАТ КӨЗІ","Электр энергиясын компьютер компоненттеріне қажетті кернеуге түрлендіріп береді."],
+ ssd:["SSD / HDD","Операциялық жүйені, бағдарламаларды және файлдарды ұзақ уақыт сақтайды."]
+};
+
+function show(id){
+ const item=descriptions[id];
+ document.getElementById("info").innerHTML=
+ `<h3>${item[0]}</h3><p>${item[1]}</p>`;
+ document.getElementById("info").scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+
+let angle=-25;
+const pc=document.getElementById("pc");
+
+function rotate(value){
+ angle+=value;
+ pc.style.transform=`rotateY(${angle}deg) rotateX(5deg)`;
+}
+
+function reset(){
+ angle=-25;
+ pc.style.transform="rotateY(-25deg) rotateX(5deg)";
+}
+
+let dragging=false;
+let lastX=0;
+const visual=document.getElementById("visual");
+
+visual.addEventListener("pointerdown",e=>{
+ dragging=true;
+ lastX=e.clientX;
+ visual.setPointerCapture(e.pointerId);
+});
+
+visual.addEventListener("pointermove",e=>{
+ if(!dragging)return;
+ angle+=(e.clientX-lastX)*0.6;
+ lastX=e.clientX;
+ pc.style.transform=`rotateY(${angle}deg) rotateX(5deg)`;
+});
+
+visual.addEventListener("pointerup",()=>dragging=false);
+visual.addEventListener("pointercancel",()=>dragging=false);
+
+const questions=[
+ {q:"Процессордың негізгі қызметі қандай?",a:["Ақпаратты өңдеу","Дыбыс шығару","Компьютерді салқындату"],correct:0},
+ {q:"RAM қандай жад?",a:["Тұрақты жад","Уақытша жад","Сыртқы жад"],correct:1},
+ {q:"Компьютер бөлшектерін не байланыстырады?",a:["Видеокарта","Аналық тақша","Желдеткіш"],correct:1},
+ {q:"Файлдар қайда сақталады?",a:["SSD / HDD","Процессор","Қуат көзі"],correct:0},
+ {q:"Компьютерді салқындататын бөлшек?",a:["RAM","SSD","Желдеткіш"],correct:2}
+];
+
+let current=0;
+
+function renderQuestion(){
+ const q=questions[current];
+ document.getElementById("question").textContent=q.q;
+ const buttons=document.querySelectorAll(".quiz button:not(.primary-btn)");
+ buttons.forEach((b,i)=>{
+  b.textContent=q.a[i];
+  b.disabled=false;
+  b.style.opacity="1";
+  b.style.borderColor="#526779";
+ });
+ document.getElementById("result").textContent="";
+}
+
+function answer(index){
+ const q=questions[current];
+ const buttons=document.querySelectorAll(".quiz button:not(.primary-btn)");
+ buttons.forEach(b=>b.disabled=true);
+ document.getElementById("result").textContent=
+ index===q.correct?"✓ Дұрыс жауап! Жарайсың!":"✕ Қате жауап. Тағы қайталап көр!";
+}
+
+function nextQuestion(){
+ current=(current+1)%questions.length;
+ renderQuestion();
+}
+
+renderQuestion();
+</script>
+
+</body>
+</html>
